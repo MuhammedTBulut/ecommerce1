@@ -5,14 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { 
   Search, 
-  ShoppingCart, 
-  User, 
   Menu, 
-  X
+  X,
+  LogIn,
+  UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/lib/auth/context';
+import CartIcon from '@/components/ui/CartIcon';
+import ProfileDropdown from '@/components/ui/ProfileDropdown';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -112,21 +114,28 @@ export default function Header() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            {isAuthenticated && (
-              <>
-                <Link href="/cart">
-                  <Button variant="ghost" size="icon" className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    {/* Cart badge would go here */}
+          <div className="header-actions flex items-center gap-4">
+            {/* Cart Icon - Always visible */}
+            <CartIcon />
+
+            {/* Authentication dependent actions */}
+            {isAuthenticated ? (
+              <ProfileDropdown />
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2 hover:bg-gray-100 transition-colors">
+                    <LogIn className="h-4 w-4" />
+                    <span className="hidden sm:block">Giriş Yap</span>
                   </Button>
                 </Link>
-                <Link href="/profile">
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5" />
+                <Link href="/register">
+                  <Button size="sm" className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white">
+                    <UserPlus className="h-4 w-4" />
+                    <span className="hidden sm:block">Kayıt Ol</span>
                   </Button>
                 </Link>
-              </>
+              </div>
             )}
 
             {/* Mobile menu button */}
@@ -186,15 +195,18 @@ export default function Header() {
             >
               All Products
             </Link>
-            {isAuthenticated && (
+            
+            {/* Cart link for mobile - always visible */}
+            <Link 
+              href="/cart" 
+              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Cart
+            </Link>
+            
+            {isAuthenticated ? (
               <>
-                <Link 
-                  href="/cart" 
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Cart
-                </Link>
                 <Link 
                   href="/orders" 
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
@@ -209,15 +221,52 @@ export default function Header() {
                 >
                   Profile
                 </Link>
+                <Link 
+                  href="/favorites" 
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Favorites
+                </Link>
+                <Link 
+                  href="/settings" 
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Settings
+                </Link>
                 {isAdmin && (
                   <Link 
                     href="/admin" 
-                    className="block px-4 py-2 text-orange-600 hover:bg-gray-100 rounded font-medium"
+                    className="block px-4 py-2 text-orange-600 hover:bg-orange-50 rounded font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Admin Panel
                   </Link>
                 )}
+                <button 
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/register" 
+                  className="block px-4 py-2 text-orange-600 hover:bg-orange-50 rounded font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
               </>
             )}
           </div>
