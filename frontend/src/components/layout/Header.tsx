@@ -5,19 +5,19 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { 
   Search, 
-  ShoppingCart, 
-  User, 
   Menu, 
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/lib/auth/context';
+import CartDropdown from './CartDropdown';
+import ProfileDropdown from './ProfileDropdown';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { isAuthenticated, isAdmin } = useAuth();
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -26,11 +26,6 @@ export default function Header() {
       router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    router.push('/');
   };
 
   return (
@@ -43,34 +38,13 @@ export default function Header() {
               <span className="text-gray-600">Free shipping on orders over $50</span>
             </div>
             <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <div className="flex items-center space-x-2">
-                  <span className="text-gray-600">Welcome, {user?.fullName}</span>
-                  {isAdmin && (
-                    <Link 
-                      href="/admin" 
-                      className="text-orange-600 hover:text-orange-700 font-medium"
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  <button 
-                    onClick={handleLogout}
-                    className="text-gray-600 hover:text-gray-800"
-                  >
-                    Logout
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Link href="/login" className="text-gray-600 hover:text-gray-800">
-                    Login
-                  </Link>
-                  <span className="text-gray-400">|</span>
-                  <Link href="/register" className="text-gray-600 hover:text-gray-800">
-                    Register
-                  </Link>
-                </div>
+              {isAdmin && (
+                <Link 
+                  href="/admin" 
+                  className="text-orange-600 hover:text-orange-700 font-medium transition-colors"
+                >
+                  Admin Panel
+                </Link>
               )}
             </div>
           </div>
@@ -112,28 +86,18 @@ export default function Header() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            {isAuthenticated && (
-              <>
-                <Link href="/cart">
-                  <Button variant="ghost" size="icon" className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    {/* Cart badge would go here */}
-                  </Button>
-                </Link>
-                <Link href="/profile">
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </Link>
-              </>
-            )}
+          <div className="flex items-center space-x-2">
+            {/* Cart dropdown - always visible */}
+            <CartDropdown />
+            
+            {/* Profile dropdown - shows login/register or user menu */}
+            <ProfileDropdown />
 
             {/* Mobile menu button */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden hover:bg-gray-100 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -181,38 +145,45 @@ export default function Header() {
           <div className="px-4 py-4 space-y-2">
             <Link 
               href="/products" 
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               All Products
             </Link>
+            <Link 
+              href="/cart" 
+              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Shopping Cart
+            </Link>
             {isAuthenticated && (
               <>
                 <Link 
-                  href="/cart" 
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Cart
-                </Link>
-                <Link 
                   href="/orders" 
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   My Orders
                 </Link>
                 <Link 
                   href="/profile" 
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Profile
                 </Link>
+                <Link 
+                  href="/support" 
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Support
+                </Link>
                 {isAdmin && (
                   <Link 
                     href="/admin" 
-                    className="block px-4 py-2 text-orange-600 hover:bg-gray-100 rounded font-medium"
+                    className="block px-4 py-2 text-orange-600 hover:bg-gray-100 rounded font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Admin Panel

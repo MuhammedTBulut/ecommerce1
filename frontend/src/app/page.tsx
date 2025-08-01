@@ -4,8 +4,59 @@ import Link from 'next/link';
 import { ArrowRight, Truck, Shield, Clock, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/lib/cart/context';
+import type { Product } from '@/types';
 
 export default function HomePage() {
+  const { addItem } = useCart();
+
+  // Mock featured products data
+  const featuredProducts: Product[] = [
+    {
+      id: 1,
+      name: "Wireless Power Drill",
+      description: "Professional cordless drill with 20V battery",
+      price: 99.99,
+      stock: 25,
+      categoryId: 3,
+      categoryName: "Tools",
+      imageUrl: "/api/placeholder/300/300"
+    },
+    {
+      id: 2,
+      name: "Smart Garden Kit",
+      description: "Complete indoor gardening solution with LED lights",
+      price: 149.99,
+      stock: 15,
+      categoryId: 2,
+      categoryName: "Home & Garden",
+      imageUrl: "/api/placeholder/300/300"
+    },
+    {
+      id: 3,
+      name: "Bluetooth Speaker",
+      description: "Waterproof portable speaker with 24h battery",
+      price: 79.99,
+      stock: 40,
+      categoryId: 1,
+      categoryName: "Electronics",
+      imageUrl: "/api/placeholder/300/300"
+    },
+    {
+      id: 4,
+      name: "Camping Tent 4-Person",
+      description: "Weather-resistant family tent with easy setup",
+      price: 199.99,
+      stock: 12,
+      categoryId: 4,
+      categoryName: "Outdoor",
+      imageUrl: "/api/placeholder/300/300"
+    }
+  ];
+
+  const handleAddToCart = (product: Product) => {
+    addItem(product);
+  };
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -181,18 +232,25 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Placeholder for featured products */}
-            {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="overflow-hidden hover:shadow-lg transition-shadow">
+            {featuredProducts.map((product) => (
+              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-square bg-gray-200 flex items-center justify-center">
                   <div className="text-4xl text-gray-400">📦</div>
                 </div>
                 <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Featured Product {i}</h3>
-                  <p className="text-sm text-gray-600 mb-2">Product description goes here</p>
+                  <h3 className="font-semibold mb-2">{product.name}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-orange-600">$99.99</span>
-                    <Button size="sm">Add to Cart</Button>
+                    <span className="text-lg font-bold text-orange-600">
+                      ${product.price.toFixed(2)}
+                    </span>
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleAddToCart(product)}
+                      className="bg-orange-600 hover:bg-orange-700"
+                    >
+                      Add to Cart
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
