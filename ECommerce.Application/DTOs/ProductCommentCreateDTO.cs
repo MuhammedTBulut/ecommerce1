@@ -5,5 +5,9 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.DTOs
 {
-    public record ProductCommentCreateDTO(string Content);
+    public record ProductCommentCreateDTO(
+        int ProductId,
+        string Comment,
+        int Rating // 1-5 puan
+    );
 }
