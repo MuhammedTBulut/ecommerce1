@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useForm } from '../../hooks';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { isValidEmail, isValidPassword } from '../../utils/helpers';
+import { isValidPassword } from '../../utils/helpers';
 
 const Register = () => {
   const { register } = useAuth();
@@ -71,7 +71,7 @@ const Register = () => {
 
     try {
       setIsLoading(true);
-      const { confirmPassword, ...registerData } = values;
+      const { confirmPassword: _, ...registerData } = values;
       await register(registerData);
       setSuccess(true);
       setTimeout(() => {

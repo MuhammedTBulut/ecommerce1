@@ -22,22 +22,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    try {
-      const data = await authService.login(credentials);
-      setUser(data.user);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await authService.login(credentials);
+    setUser(data.user);
+    return data;
   };
 
   const register = async (userData) => {
-    try {
-      const data = await authService.register(userData);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await authService.register(userData);
+    return data;
   };
 
   const logout = () => {

@@ -18,34 +18,94 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  // Create a simple image placeholder
+  const placeholderImage = `data:image/svg+xml,${encodeURIComponent(`
+    <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#f8f9fa"/>
+      <rect x="20" y="20" width="260" height="260" fill="#e9ecef" rx="8"/>
+      <text x="150" y="140" text-anchor="middle" font-family="Arial" font-size="14" fill="#6c757d">
+        ${product.name}
+      </text>
+      <text x="150" y="160" text-anchor="middle" font-family="Arial" font-size="12" fill="#adb5bd">
+        Product Image
+      </text>
+    </svg>
+  `)}`;
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<span key={i} className="star filled">★</span>);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(<span key="half" className="star half">★</span>);
+    }
+    
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<span key={`empty-${i}`} className="star empty">☆</span>);
+    }
+    
+    return stars;
+  };
+
   return (
-    <div className="product-card">
+    <div className="product-card glass-card">
       <Link to={`/products/${product.id}`} className="product-link">
         <div className="product-image">
           <img 
-            src={getImageUrl(product.imageUrl)} 
+            src={placeholderImage}
             alt={product.name}
-            onError={(e) => {
-              e.target.src = '/placeholder-image.png';
-            }}
+            loading="lazy"
           />
+          {product.inStock ? (
+            <div className="stock-badge in-stock">In Stock</div>
+          ) : (
+            <div className="stock-badge out-of-stock">Out of Stock</div>
+          )}
         </div>
         
         <div className="product-info">
           <h3 className="product-name">{product.name}</h3>
-          <p className="product-category">{product.categoryName}</p>
+          {product.category && (
+            <p className="product-category">{product.category.name}</p>
+          )}
+          
+          {product.rating && (
+            <div className="product-rating">
+              <div className="stars">
+                {renderStars(product.rating)}
+              </div>
+              {product.reviewCount && (
+                <span className="review-count">({product.reviewCount})</span>
+              )}
+            </div>
+          )}
+          
           <div className="product-price">
-            {formatCurrency(product.price)}
+            <span className="current-price">{formatCurrency(product.price)}</span>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="original-price">{formatCurrency(product.originalPrice)}</span>
+            )}
           </div>
+          
+          {product.description && (
+            <p className="product-description">{product.description}</p>
+          )}
         </div>
       </Link>
       
       <div className="product-actions">
         <button 
           onClick={handleAddToCart}
-          className="add-to-cart-btn"
+          className="add-to-cart-btn btn btn-gradient"
+          disabled={!product.inStock}
         >
-          Add to Cart
+          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
         </button>
       </div>
     </div>
