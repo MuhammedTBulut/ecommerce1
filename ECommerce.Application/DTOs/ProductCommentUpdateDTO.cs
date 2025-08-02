@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.DTOs
 {
-    public record ProductCommentDTO(
-        int Id,
-        int ProductId,
+    public record ProductCommentUpdateDTO(
         string Comment,
-        int Rating,
-        DateTime CreatedAt,
-        string UserName
+        int Rating
     );
 }
