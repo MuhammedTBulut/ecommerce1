@@ -25,12 +25,13 @@ body {
 
 /* CSS Variables - Light Theme */
 :root {
-  /* Primary Colors with Bold Gradients */
-  --primary-color: #007bff;
-  --primary-dark: #0056b3;
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  /* OBI.de Inspired Primary Colors */
+  --primary-color: #ff6600;
+  --primary-dark: #e55a00;
+  --primary-light: #ff8533;
+  --primary-gradient: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
+  --secondary-gradient: linear-gradient(135deg, #ff8533 0%, #ff6600 100%);
+  --accent-gradient: linear-gradient(135deg, #ffaa33 0%, #ff6600 100%);
   
   /* Semantic Colors */
   --secondary-color: #6c757d;
@@ -38,8 +39,8 @@ body {
   --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   --danger-color: #dc3545;
   --danger-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
-  --warning-color: #ffc107;
-  --warning-gradient: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%);
+  --warning-color: #ffaa33;
+  --warning-gradient: linear-gradient(135deg, #ffaa33 0%, #ff6600 100%);
   --info-color: #17a2b8;
   
   /* Light Theme Colors */

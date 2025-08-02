@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useForm } from '../../hooks';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { isValidEmail } from '../../utils/helpers';
 
 const Login = () => {
   const { login } = useAuth();

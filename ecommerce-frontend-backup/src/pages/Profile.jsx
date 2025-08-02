@@ -5,7 +5,7 @@ import { useForm } from '../hooks';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -49,11 +49,11 @@ const Profile = () => {
         
         // Update form values
         Object.keys(profileData).forEach(key => {
-          if (values.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(values, key)) {
             handleChange(key, profileData[key] || '');
           }
         });
-      } catch (err) {
+      } catch {
         setError('Failed to load profile');
       } finally {
         setLoading(false);
@@ -61,7 +61,7 @@ const Profile = () => {
     };
 
     loadProfile();
-  }, []);
+  }, [handleChange, values]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,7 +88,7 @@ const Profile = () => {
       try {
         await userService.deleteAccount();
         logout();
-      } catch (err) {
+      } catch {
         setError('Failed to delete account');
       }
     }

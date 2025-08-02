@@ -21,7 +21,7 @@ export const useApi = (apiFunction, dependencies = []) => {
     };
 
     fetchData();
-  }, dependencies);
+  }, [apiFunction, ...dependencies]);
 
   const refetch = async () => {
     try {

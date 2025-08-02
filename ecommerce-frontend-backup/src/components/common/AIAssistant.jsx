@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +11,6 @@ const AIAssistant = () => {
     }
   ]);
   const [inputValue, setInputValue] = useState('');
-  const { isDark } = useTheme();
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -41,7 +39,7 @@ const AIAssistant = () => {
     setInputValue('');
   };
 
-  const generateAIResponse = (userInput) => {
+  const generateAIResponse = () => {
     const responses = [
       "I'd be happy to help you find the perfect product! Can you tell me more about what you're looking for?",
       "Based on your preferences, I can recommend some popular items from our catalog.",
