@@ -13,7 +13,7 @@ const Home = () => {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        <div className="container">
+        <div className="container-content">
           <div className="hero-content animate-slideInUp">
             <h1>Welcome to E-Commerce Store</h1>
             <p>Discover amazing products at unbeatable prices. Shop with confidence and enjoy fast, reliable delivery.</p>
@@ -34,7 +34,7 @@ const Home = () => {
 
       {/* Features Section */}
       <section className="features" ref={featuresRef}>
-        <div className="container">
+        <div className="container-content">
           <div className="scroll-reveal">
             <h2>Why Choose Us?</h2>
             <div className="features-grid">
@@ -65,7 +65,7 @@ const Home = () => {
 
       {/* Categories Section */}
       <section className="categories" ref={categoriesRef}>
-        <div className="container">
+        <div className="container-content">
           <div className="scroll-reveal">
             <h2>Shop by Category</h2>
             <div className="categories-grid">
@@ -92,7 +92,7 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="cta" ref={ctaRef}>
-        <div className="container">
+        <div className="container-content">
           <div className="cta-content scroll-reveal">
             <h2>Ready to Start Shopping?</h2>
             <p>Join thousands of satisfied customers and discover your next favorite product.</p>

@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="container">
+      <div className="container-content">
         <div className="header-content">
           {/* Logo */}
           <div className="logo">
