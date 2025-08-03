@@ -24,6 +24,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     const data = await authService.login(credentials);
     setUser(data.user);
+    
+    // Redirect admin users to React Admin dashboard
+    if (data.user?.role === 'Admin') {
+      const adminUrl = import.meta.env.VITE_ADMIN_DASHBOARD_URL || 'http://localhost:3001';
+      window.location.href = adminUrl;
+      return data;
+    }
+    
     return data;
   };
 
