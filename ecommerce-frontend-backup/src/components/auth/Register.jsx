@@ -56,7 +56,7 @@ const Register = () => {
       password: '',
       confirmPassword: '',
       birthDate: '',
-      gender: '',
+      gender: null,
     },
     validationRules
   );
@@ -201,16 +201,20 @@ const Register = () => {
               <label htmlFor="gender">Gender</label>
               <select
                 id="gender"
-                value={values.gender}
-                onChange={(e) => handleChange('gender', e.target.value)}
+                value={values.gender === null ? '' : values.gender.toString()}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const genderValue = value === '' ? null : value === 'true';
+                  handleChange('gender', genderValue);
+                }}
                 onBlur={() => handleBlur('gender')}
                 className={errors.gender && touched.gender ? 'input-error' : ''}
                 required
               >
                 <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="true">Male</option>
+                <option value="false">Female</option>
+                <option value="">Other</option>
               </select>
               {errors.gender && touched.gender && (
                 <span className="field-error">{errors.gender}</span>

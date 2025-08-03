@@ -23,6 +23,8 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminUserCreate from './pages/admin/AdminUserCreate';
+import AdminUserEdit from './pages/admin/AdminUserEdit';
 
 import './styles/main.css';
 
@@ -106,6 +108,22 @@ function App() {
                   element={
                     <ProtectedRoute adminOnly>
                       <AdminUsers />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/users/create"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <AdminUserCreate />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/users/edit/:id"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <AdminUserEdit />
                     </ProtectedRoute>
                   }
                 />
