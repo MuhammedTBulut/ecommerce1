@@ -122,7 +122,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
                 
                 return BadRequest(new { 
                     message = "Giriş bilgilerinde hata var.",
-                    errors = errors 
+                    errors = errors,
+                    success = false
                 });
             }
 
@@ -132,7 +133,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             {
                 return BadRequest(new { 
                     message = "Şifre güvenlik koşullarını karşılamıyor.",
-                    errors = passwordValidationResult.Errors 
+                    errors = passwordValidationResult.Errors,
+                    success = false
                 });
             }
 
@@ -142,7 +144,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             {
                 return BadRequest(new { 
                     message = "Bu e-posta adresi zaten kayıtlı.",
-                    errors = new List<string> { "Bu e-posta adresi zaten kayıtlı." }
+                    errors = new List<string> { "Bu e-posta adresi zaten kayıtlı." },
+                    success = false
                 });
             }
 
@@ -156,7 +159,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
                 Console.WriteLine("❌ Customer role not found in database");
                 return StatusCode(500, new { 
                     message = "Sistem hatası oluştu. Lütfen daha sonra tekrar deneyin.",
-                    errors = new List<string> { "Customer rolü bulunamadı." }
+                    errors = new List<string> { "Customer rolü bulunamadı." },
+                    success = false
                 });
             }
 
@@ -188,7 +192,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             
             return StatusCode(500, new { 
                 message = "Kayıt sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-                errors = new List<string> { "Sistem hatası oluştu." }
+                errors = new List<string> { "Sistem hatası oluştu." },
+                success = false
             });
         }
     }
