@@ -5,7 +5,7 @@ using ECommerce.Infrastructure.Data;
 using ECommerce.Application.DTOs;
 using ECommerce.Domain.Enums;
 
-namespace ECommerce.API.Controllers;
+namespace ECommerce.API.Controllers.Admin;
 
 [Authorize(Roles = "Admin")]
 [ApiController]

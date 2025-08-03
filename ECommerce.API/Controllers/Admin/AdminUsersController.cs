@@ -5,7 +5,7 @@ using ECommerce.Application.DTOs;
 using ECommerce.Domain.Models;
 using ECommerce.Infrastructure.Data;
 
-namespace ECommerce.API.Controllers;
+namespace ECommerce.API.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin/users")]
