@@ -78,6 +78,7 @@ public class OrdersController(AppDbContext db) : ControllerBase
         var isAdmin = User.IsInRole("Admin");
 
         var order = await db.Orders
+            .Include(o => o.User)
             .Include(o => o.Items).ThenInclude(i => i.Product)
             .Where(o => o.Id == id && (o.UserId == userId || isAdmin))
             .SingleOrDefaultAsync();
@@ -92,7 +93,9 @@ public class OrdersController(AppDbContext db) : ControllerBase
                 i.Product.Price,
                 i.Quantity
             )).ToList(),
-            order.Items.Sum(i => i.Quantity * i.Product.Price)
+            order.Items.Sum(i => i.Quantity * i.Product.Price),
+            order.Status,
+            order.User.FullName
         );
 
         return Ok(dto);
