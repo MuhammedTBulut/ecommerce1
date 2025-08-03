@@ -8,6 +8,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 body {
@@ -21,6 +22,9 @@ body {
   background: var(--background-color);
   transition: var(--transition);
   overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* CSS Variables - Light Theme */
@@ -113,9 +117,16 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
+}
+
+/* For sections that need content width constraints */
+.container-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 /* Typography */
@@ -1596,8 +1607,8 @@ textarea:focus {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 0.5rem;
+  .container, .container-content {
+    padding: 0 1rem;
   }
   
   .form-row {
@@ -1652,6 +1663,19 @@ textarea:focus {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+}
+
+/* Larger screens - ensure content doesn't get too wide */
+@media (min-width: 1400px) {
+  .container-content {
+    max-width: 1400px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .container-content {
+    max-width: 1600px;
   }
 }
 
