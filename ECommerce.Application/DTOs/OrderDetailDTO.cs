@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ECommerce.Domain.Enums;
 
 namespace ECommerce.Application.DTOs
 {
@@ -9,7 +6,9 @@ namespace ECommerce.Application.DTOs
     int Id,
     DateTime CreatedAt,
     List<OrderProductDTO> Products,
-    decimal TotalPrice
+    decimal TotalPrice,
+    OrderStatus Status,
+    string CustomerName
 );
 
 public record OrderProductDTO(string Name, decimal Price, int Quantity);

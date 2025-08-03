@@ -25,35 +25,10 @@ namespace ECommerce.Application.Services
                 return result;
             }
 
-            // Minimum 8 karakter kontrolü
-            if (password.Length < 8)
+            // Minimum 6 karakter kontrolü
+            if (password.Length < 6)
             {
-                errors.Add("Şifre en az 8 karakter olmalıdır.");
-            }
-
-            // Büyük harf kontrolü (A-Z)
-            if (!password.Any(c => char.IsUpper(c)))
-            {
-                errors.Add("Şifre en az 1 büyük harf içermelidir (A-Z).");
-            }
-
-            // Küçük harf kontrolü (a-z)
-            if (!password.Any(c => char.IsLower(c)))
-            {
-                errors.Add("Şifre en az 1 küçük harf içermelidir (a-z).");
-            }
-
-            // Sayı kontrolü (0-9)
-            if (!password.Any(c => char.IsDigit(c)))
-            {
-                errors.Add("Şifre en az 1 sayı içermelidir (0-9).");
-            }
-
-            // Özel karakter kontrolü (!@#$%^&*)
-            var specialChars = "!@#$%^&*";
-            if (!password.Any(c => specialChars.Contains(c)))
-            {
-                errors.Add("Şifre en az 1 özel karakter içermelidir (!@#$%^&*).");
+                errors.Add("Şifre en az 6 karakter olmalıdır.");
             }
 
             // Yaygın şifre kontrolü

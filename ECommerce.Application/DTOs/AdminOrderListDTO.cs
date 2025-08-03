@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ECommerce.Domain.Enums;
 
 namespace ECommerce.Application.DTOs
 {
-    public record AdminOrderListDTO(int Id, string OrderNo, DateTime CreatedAt, decimal TotalAmount);
+    public record AdminOrderListDTO(int Id, string CustomerName, DateTime CreatedAt, decimal TotalAmount, OrderStatus Status);
 }
