@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using ECommerce.Infrastructure.Data;
+using ECommerce.Application.Services.Interfaces;
+using ECommerce.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,9 @@ builder.Services.AddSwaggerGen(config =>
 
 // 6. MVC Controller desteği
 builder.Services.AddControllers();
+
+// 7. Application Services (Password Validation)
+builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
 
 
 var app = builder.Build();

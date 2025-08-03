@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ECommerce.Domain.Models;
+using ECommerce.Application.Services.Interfaces;
 
 namespace ECommerce.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(AppDbContext db, IConfiguration config) : ControllerBase
+public class AuthController(AppDbContext db, IConfiguration config, IPasswordValidationService passwordValidation) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO dto)
@@ -111,21 +112,59 @@ public class AuthController(AppDbContext db, IConfiguration config) : Controller
     {
         try
         {
+            // ModelState validation kontrolü
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                
+                return BadRequest(new { 
+                    message = "Giriş bilgilerinde hata var.",
+                    errors = errors 
+                });
+            }
+
+            // Şifre güvenlik kontrolü
+            var passwordValidationResult = await passwordValidation.ValidateAsync(dto.Password);
+            if (!passwordValidationResult.IsValid)
+            {
+                return BadRequest(new { 
+                    message = "Şifre güvenlik koşullarını karşılamıyor.",
+                    errors = passwordValidationResult.Errors 
+                });
+            }
+
+            // E-posta mevcut mu kontrolü
             bool emailExists = await db.Users.AnyAsync(u => u.Email == dto.Email);
             if (emailExists)
-                return BadRequest("Bu e-posta zaten kayıtlı.");
+            {
+                return BadRequest(new { 
+                    message = "Bu e-posta adresi zaten kayıtlı.",
+                    errors = new List<string> { "Bu e-posta adresi zaten kayıtlı." }
+                });
+            }
 
+            // Şifre hash'leme
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // 👇 Rolü veritabanından çek
+            // Customer rolünü bul
             var role = await db.Roles.FirstOrDefaultAsync(r => r.Name == "Customer");
             if (role == null)
-                return BadRequest("Customer rolü bulunamadı. Lütfen bir admin tanımlasın.");
+            {
+                Console.WriteLine("❌ Customer role not found in database");
+                return StatusCode(500, new { 
+                    message = "Sistem hatası oluştu. Lütfen daha sonra tekrar deneyin.",
+                    errors = new List<string> { "Customer rolü bulunamadı." }
+                });
+            }
 
+            // Yeni kullanıcı oluştur
             var user = new User
             {
-                FullName = dto.FullName,
-                Email = dto.Email,
+                FullName = dto.FullName.Trim(),
+                Email = dto.Email.Trim().ToLowerInvariant(),
                 PasswordHash = passwordHash,
                 RoleId = role.Id,
                 BirthDate = dto.BirthDate,
@@ -135,14 +174,22 @@ public class AuthController(AppDbContext db, IConfiguration config) : Controller
             db.Users.Add(user);
             await db.SaveChangesAsync();
 
-            Console.WriteLine($"✅ New user registered: {dto.Email}");
+            Console.WriteLine($"✅ New user registered successfully: {dto.Email}");
 
-            return Ok("Kayıt başarılı.");
+            return Ok(new { 
+                message = "Kayıt başarıyla tamamlandı. Giriş yapabilirsiniz.",
+                success = true 
+            });
         }
         catch (Exception ex)
         {
             Console.WriteLine($"🚫 Registration error: {ex.Message}");
-            return StatusCode(500, "Internal server error during registration.");
+            Console.WriteLine($"📍 Stack trace: {ex.StackTrace}");
+            
+            return StatusCode(500, new { 
+                message = "Kayıt sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                errors = new List<string> { "Sistem hatası oluştu." }
+            });
         }
     }
 }
