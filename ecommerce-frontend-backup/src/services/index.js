@@ -157,18 +157,40 @@ export const supportService = {
 };
 
 export const adminService = {
-  async getUsers() {
-    const response = await api.get('/admin/users');
+  async getUsers(page = 1, pageSize = 10, search = '') {
+    const params = { page, pageSize };
+    if (search) params.search = search;
+    const response = await api.get('/admin/users', { params });
+    return response.data;
+  },
+
+  async getUser(id) {
+    const response = await api.get(`/admin/users/${id}`);
+    return response.data;
+  },
+
+  async createUser(userData) {
+    const response = await api.post('/admin/users', userData);
+    return response.data;
+  },
+
+  async updateUser(id, userData) {
+    const response = await api.put(`/admin/users/${id}`, userData);
+    return response.data;
+  },
+
+  async deleteUser(id) {
+    const response = await api.delete(`/admin/users/${id}`);
+    return response.data;
+  },
+
+  async getRoles() {
+    const response = await api.get('/admin/users/roles');
     return response.data;
   },
 
   async getOrders() {
     const response = await api.get('/admin/orders');
-    return response.data;
-  },
-
-  async getRoles() {
-    const response = await api.get('/admin/roles');
     return response.data;
   },
 };
