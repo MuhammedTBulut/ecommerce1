@@ -22,7 +22,7 @@ public class CategoriesController(AppDbContext db, IMemoryCache cache, ILogger<C
         // Check cache first
         if (cache.TryGetValue(CacheKey, out List<CategoryDTO>? cachedCategories))
         {
-            logger.LogInformation("Categories retrieved from cache");
+            logger.LogDebug("Categories retrieved from cache");
             return Ok(cachedCategories);
         }
 
