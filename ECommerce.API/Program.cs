@@ -85,6 +85,9 @@ builder.Services.AddControllers();
 // 7. Application Services (Password Validation)
 builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
 
+// 8. Memory Cache for performance optimization
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
