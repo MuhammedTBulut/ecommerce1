@@ -1,6 +1,6 @@
 import { fetchUtils } from 'react-admin';
 
-const apiUrl = 'http://localhost:5000/api/admin';
+const apiUrl = 'http://localhost:5095/api/admin';
 
 export const dataProvider = {
   getList: async (resource, params) => {

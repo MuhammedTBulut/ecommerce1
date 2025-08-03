@@ -1,6 +1,64 @@
-# Getting Started with Create React App
+# E-Commerce Admin Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React Admin-based dashboard for managing the e-commerce platform.
+
+## Features
+
+- **User Management**: View, edit, and manage user accounts and roles
+- **Product Management**: Add, edit, delete, and categorize products
+- **Category Management**: Manage product categories
+- **Order Management**: View and update order statuses
+- **Admin Authentication**: Secure login with JWT tokens
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- Backend API running on port 5095
+
+### Installation
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm start
+```
+
+The admin dashboard will open at http://localhost:3001
+
+### Login
+
+Use admin credentials to access the dashboard. Only users with "Admin" role can access the system.
+
+### API Endpoints
+
+The admin dashboard communicates with these backend endpoints:
+
+- `GET /api/admin/users` - List all users
+- `GET /api/admin/products` - List all products  
+- `GET /api/admin/categories` - List all categories
+- `GET /api/admin/orders` - List all orders
+- And full CRUD operations for each resource
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+This creates an optimized production build in the `build` folder.
+
+## Technology Stack
+
+- **React Admin**: Admin interface framework
+- **Material-UI**: Component library
+- **TypeScript**: Type safety (with relaxed mode for compatibility)
+- **JWT Authentication**: Secure admin access
 
 ## Available Scripts
 
