@@ -4,6 +4,7 @@ import { productService } from '../services';
 import { useCart } from '../contexts/CartContext';
 import { formatCurrency, getImageUrl } from '../utils/helpers';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import ProductReviews from '../components/product/ProductReviews';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -135,6 +136,9 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Product Reviews Section */}
+        <ProductReviews productId={parseInt(id)} />
       </div>
     </div>
   );

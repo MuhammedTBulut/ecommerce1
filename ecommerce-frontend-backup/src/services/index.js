@@ -59,6 +59,22 @@ export const productService = {
     const response = await api.delete(`/products/${id}`);
     return response.data;
   },
+
+  // Product Comments/Reviews
+  async getProductComments(productId) {
+    const response = await api.get(`/productcomments/${productId}`);
+    return response.data;
+  },
+
+  async createProductComment(productId, commentData) {
+    const response = await api.post(`/productcomments/${productId}`, commentData);
+    return response.data;
+  },
+
+  async getProductRatingStats(productId) {
+    const response = await api.get(`/productcomments/${productId}/stats`);
+    return response.data;
+  },
 };
 
 export const categoryService = {

@@ -17,15 +17,6 @@ import Support from './pages/Support';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 
-// Admin Pages
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminProducts from './pages/admin/AdminProducts';
-import AdminCategories from './pages/admin/AdminCategories';
-import AdminOrders from './pages/admin/AdminOrders';
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminUserCreate from './pages/admin/AdminUserCreate';
-import AdminUserEdit from './pages/admin/AdminUserEdit';
-
 import './styles/main.css';
 
 function App() {
@@ -66,64 +57,6 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Support />
-                    </ProtectedRoute>
-                  }
-                />
-
-                {/* Admin routes */}
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/products"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminProducts />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/categories"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminCategories />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/orders"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminOrders />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/users"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminUsers />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/users/create"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminUserCreate />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/users/edit/:id"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <AdminUserEdit />
                     </ProtectedRoute>
                   }
                 />
