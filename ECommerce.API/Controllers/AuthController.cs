@@ -112,13 +112,17 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
     {
         try
         {
-            // ModelState validation kontrolü
+            Console.WriteLine($"🔍 Registration attempt for: {dto.Email}");
+
+            // ModelState validation kontrolü (includes password confirmation)
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values
                     .SelectMany(v => v.Errors)
                     .Select(e => e.ErrorMessage)
                     .ToList();
+                
+                Console.WriteLine($"❌ ModelState validation failed: {string.Join(", ", errors)}");
                 
                 return BadRequest(new { 
                     message = "Giriş bilgilerinde hata var.",
@@ -131,6 +135,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             var passwordValidationResult = await passwordValidation.ValidateAsync(dto.Password);
             if (!passwordValidationResult.IsValid)
             {
+                Console.WriteLine($"❌ Password validation failed: {string.Join(", ", passwordValidationResult.Errors)}");
+                
                 return BadRequest(new { 
                     message = "Şifre güvenlik koşullarını karşılamıyor.",
                     errors = passwordValidationResult.Errors,
@@ -139,9 +145,11 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             }
 
             // E-posta mevcut mu kontrolü
-            bool emailExists = await db.Users.AnyAsync(u => u.Email == dto.Email);
+            bool emailExists = await db.Users.AnyAsync(u => u.Email.ToLower() == dto.Email.ToLower());
             if (emailExists)
             {
+                Console.WriteLine($"❌ Email already exists: {dto.Email}");
+                
                 return BadRequest(new { 
                     message = "Bu e-posta adresi zaten kayıtlı.",
                     errors = new List<string> { "Bu e-posta adresi zaten kayıtlı." },
@@ -149,20 +157,21 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
                 });
             }
 
-            // Şifre hash'leme
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
             // Customer rolünü bul
             var role = await db.Roles.FirstOrDefaultAsync(r => r.Name == "Customer");
             if (role == null)
             {
                 Console.WriteLine("❌ Customer role not found in database");
+                
                 return StatusCode(500, new { 
                     message = "Sistem hatası oluştu. Lütfen daha sonra tekrar deneyin.",
                     errors = new List<string> { "Customer rolü bulunamadı." },
                     success = false
                 });
             }
+
+            // Şifre hash'leme
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
             // Yeni kullanıcı oluştur
             var user = new User
@@ -175,6 +184,8 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
                 Gender = dto.Gender
             };
 
+            Console.WriteLine($"🔄 Adding new user to database: {user.Email}");
+
             db.Users.Add(user);
             await db.SaveChangesAsync();
 
@@ -183,6 +194,28 @@ public class AuthController(AppDbContext db, IConfiguration config, IPasswordVal
             return Ok(new { 
                 message = "Kayıt başarıyla tamamlandı. Giriş yapabilirsiniz.",
                 success = true 
+            });
+        }
+        catch (DbUpdateException dbEx)
+        {
+            Console.WriteLine($"🚫 Database error during registration: {dbEx.Message}");
+            Console.WriteLine($"📍 Inner exception: {dbEx.InnerException?.Message}");
+            
+            // Check if it's a unique constraint violation
+            if (dbEx.InnerException?.Message?.Contains("duplicate") == true || 
+                dbEx.InnerException?.Message?.Contains("UNIQUE") == true)
+            {
+                return BadRequest(new { 
+                    message = "Bu e-posta adresi zaten kayıtlı.",
+                    errors = new List<string> { "Bu e-posta adresi zaten kayıtlı." },
+                    success = false
+                });
+            }
+            
+            return StatusCode(500, new { 
+                message = "Veritabanı hatası oluştu. Lütfen daha sonra tekrar deneyin.",
+                errors = new List<string> { "Veritabanı işlemi başarısız." },
+                success = false
             });
         }
         catch (Exception ex)
